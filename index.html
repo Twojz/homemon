@@ -444,6 +444,7 @@ body.logged-in #loginScreen { display: none; }
 ------------------------------------------------------- */
 body {
   position: relative;
+  display: flow-root; /* keeps the container's top margin from pushing the icicles down */
   background:
     radial-gradient(ellipse at 15% -5%, rgba(95,224,255,.10), transparent 50%),
     radial-gradient(ellipse at top, #15264a 0%, var(--bg) 58%);
