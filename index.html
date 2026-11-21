@@ -20,6 +20,7 @@
   --blue: #8fa8ff;
   --accent: #9db4ff;
   --red: #ff6878;
+  --ice: #a9e6ff;
 }
 
 * { box-sizing: border-box; }
@@ -438,14 +439,231 @@ body.logged-in #loginScreen { display: none; }
 #loginMessage { min-height: 20px; margin-top: 12px; color: var(--red); font-size: 12px; }
 .login-foot { margin-top: 22px; color: var(--muted); font-size: 11px; text-align: center; }
 
+/* -------------------------------------------------------
+   WINTER THEME
+------------------------------------------------------- */
+body {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 15% -5%, rgba(95,224,255,.10), transparent 50%),
+    radial-gradient(ellipse at top, #15264a 0%, var(--bg) 58%);
+  background-attachment: fixed;
+}
+
+/* slow northern-lights glow behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20% -10% auto -10%;
+  height: 70vh;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 60% at 25% 40%, rgba(80,230,200,.13), transparent 70%),
+    radial-gradient(35% 55% at 60% 30%, rgba(120,150,255,.16), transparent 70%),
+    radial-gradient(30% 50% at 85% 45%, rgba(190,120,255,.10), transparent 70%);
+  filter: blur(30px);
+  animation: aurora 22s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  from { transform: translateX(-4%) skewX(-6deg); opacity: .7; }
+  to   { transform: translateX(5%) skewX(5deg);  opacity: 1; }
+}
+
+.container, #loginScreen { position: relative; z-index: 1; }
+.container { margin-top: 46px; }
+
+/* icicles hanging from the top edge */
+.icicles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 36px;
+  z-index: 3;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='36' viewBox='0 0 360 36'%3E%3Crect width='360' height='5' fill='rgb(190,235,255)' fill-opacity='.30'/%3E%3Cpath d='M9 4L18 22L27 4ZM38 4L44 14L50 4ZM60 4L70 30L80 4ZM93 4L100 17L107 4ZM119 4L128 24L137 4ZM152 4L158 13L164 4ZM173 4L184 34L195 4ZM207 4L214 18L221 4ZM231 4L240 26L249 4ZM262 4L268 15L274 4ZM286 4L296 31L306 4ZM317 4L324 19L331 4ZM342 4L348 13L354 4Z' fill='rgb(190,235,255)' fill-opacity='.30'/%3E%3C/svg%3E") repeat-x top left;
+  background-size: 360px 36px;
+}
+
+/* snow banks at the bottom of the page */
+.drift {
+  position: relative;
+  z-index: 1;
+  height: 60px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='56' viewBox='0 0 360 56'%3E%3Cpath d='M0 30Q45 10 90 30T180 30T270 30T360 30V56H0Z' fill='rgb(200,235,255)' fill-opacity='.08'/%3E%3C/svg%3E") repeat-x bottom left,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='38' viewBox='0 0 240 38'%3E%3Cpath d='M0 20Q30 6 60 20T120 20T180 20T240 20V38H0Z' fill='rgb(200,235,255)' fill-opacity='.12'/%3E%3C/svg%3E") repeat-x bottom left;
+  background-size: 360px 56px, 240px 38px;
+}
+body:not(.logged-in) .drift { display: none; }
+
+/* falling snow */
+#snow {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* frosty headings */
+h1 {
+  background: linear-gradient(90deg, #ffffff 0%, #bfeaff 55%, #9db4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.flake-icon {
+  width: .95em;
+  height: .95em;
+  vertical-align: -.12em;
+  margin-right: 9px;
+  color: var(--ice);
+  animation: flakeSpin 28s linear infinite;
+}
+@keyframes flakeSpin { to { transform: rotate(360deg); } }
+
+/* frosted cards */
+.card, .panel {
+  background: linear-gradient(180deg, rgba(25,40,66,.90), rgba(15,25,43,.92));
+  border-color: rgba(150,215,255,.17);
+  box-shadow: 0 5px 20px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.status-pill { border-color: rgba(150,215,255,.20); }
+button:hover { border-color: var(--ice); }
+
+/* login screen */
+.login-card {
+  border-color: rgba(150,215,255,.22);
+  background: linear-gradient(180deg, rgba(22,36,60,.96), rgba(13,22,38,.97));
+  box-shadow: 0 18px 60px rgba(0,0,0,.5), 0 0 70px rgba(95,224,255,.10),
+              inset 0 1px 0 rgba(255,255,255,.08);
+}
+.login-mark {
+  background: linear-gradient(145deg, #1a3a55, #12243a);
+  box-shadow: 0 0 24px rgba(66,217,245,.28), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.login-mark svg { width: 26px; height: 26px; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, .flake-icon { animation: none; }
+}
+
+/* last system-health card fills the empty slot */
+.system-grid .card:last-child:nth-child(3n+2) { grid-column: span 2; }
+@media (max-width: 850px) {
+  .system-grid .card:last-child:nth-child(odd) { grid-column: span 2; }
+}
+
 </style>
+
+<script>
+/* -------------------------------------------------------
+   LOGIN (casual access barrier only)
+   The page is static, so this keeps out casual visitors, not
+   a determined one. Credentials are stored as a salted
+   SHA-256 hash instead of plain text.
+
+   To change the login, open this page, press F12 and run in the
+   console (use your own username and password):
+     sha256Hex(AUTH_SALT + ":" + "myUser" + ":" + "myPassword").then(console.log)
+   then paste the result into AUTH_HASH below.
+------------------------------------------------------- */
+const AUTH_SALT = "8e1e3c8f224ffa8e22c8f410";
+const AUTH_HASH = "b17d2a8426d38a37d778ad4cf3cda4d7b069dc2d15b2a56936b89a966116e2ed";
+
+function sha256Fallback(message) {
+  /* Used only when crypto.subtle is missing (plain http pages). */
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  const primes = [];
+  for (let c = 2; primes.length < 64; c++) {
+    if (primes.every(p => c % p)) primes.push(c);
+  }
+  const frac = x => Math.floor((x - Math.floor(x)) * 4294967296);
+  const K = primes.map(p => frac(Math.cbrt(p)));
+  const H = primes.slice(0, 8).map(p => frac(Math.sqrt(p)));
+
+  const data = Array.from(new TextEncoder().encode(message));
+  const bitLen = data.length * 8;
+  data.push(0x80);
+  while (data.length % 64 !== 56) data.push(0);
+  for (let i = 7; i >= 0; i--) data.push(i >= 4 ? 0 : (bitLen >>> (i * 8)) & 255);
+
+  for (let off = 0; off < data.length; off += 64) {
+    const w = new Array(64);
+    for (let i = 0; i < 16; i++) {
+      w[i] = (data[off + 4*i] << 24) | (data[off + 4*i + 1] << 16) |
+             (data[off + 4*i + 2] << 8) | data[off + 4*i + 3];
+    }
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i-15], 7) ^ rotr(w[i-15], 18) ^ (w[i-15] >>> 3);
+      const s1 = rotr(w[i-2], 17) ^ rotr(w[i-2], 19) ^ (w[i-2] >>> 10);
+      w[i] = (w[i-16] + s0 + w[i-7] + s1) | 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (h + S1 + ch + K[i] + w[i]) | 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + maj) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0;
+      d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    [a, b, c, d, e, f, g, h].forEach((v, i) => { H[i] = (H[i] + v) | 0; });
+  }
+  return H.map(x => (x >>> 0).toString(16).padStart(8, "0")).join("");
+}
+
+async function sha256Hex(text) {
+  if (window.crypto && window.crypto.subtle) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  return sha256Fallback(text);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const username = document.getElementById("loginUser").value;
+    const password = document.getElementById("loginPassword").value;
+    const hash = await sha256Hex(AUTH_SALT + ":" + username + ":" + password);
+
+    if (hash === AUTH_HASH) {
+      document.getElementById("loginMessage").textContent = "";
+      document.body.classList.add("logged-in");
+      startDashboard();
+    } else {
+      document.getElementById("loginMessage").textContent =
+        "Incorrect username or password.";
+    }
+  });
+});
+</script>
 </head>
 
 <body>
 
+<canvas id="snow" aria-hidden="true"></canvas>
+<div class="icicles" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="flake" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <g><path d="M12 2V22"/><path d="M9.6 4.4L12 6.8 14.4 4.4"/><path d="M9.6 19.6L12 17.2 14.4 19.6"/></g>
+      <g transform="rotate(60 12 12)"><path d="M12 2V22"/><path d="M9.6 4.4L12 6.8 14.4 4.4"/><path d="M9.6 19.6L12 17.2 14.4 19.6"/></g>
+      <g transform="rotate(120 12 12)"><path d="M12 2V22"/><path d="M9.6 4.4L12 6.8 14.4 4.4"/><path d="M9.6 19.6L12 17.2 14.4 19.6"/></g>
+    </g>
+  </symbol>
+</svg>
+
 <div id="loginScreen">
   <form class="login-card" id="loginForm">
-    <div class="login-mark">⌁</div>
+    <div class="login-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.2 2 4.8 13.4h5.9L9.8 22l9.4-12h-6.1L13.2 2z"/></svg></div>
     <h1>HOME TEMPERATURE MONITOR</h1>
     <div class="login-subtitle">Pico 2 W · Remote monitoring</div>
     <label for="loginUser">Username</label>
@@ -464,8 +682,8 @@ body.logged-in #loginScreen { display: none; }
 
 <header>
   <div>
-    <h1>HOME TEMPERATURE MONITOR</h1>
-    <div class="subtitle">Pico 2 W · ThingSpeak public cloud data · V11</div>
+    <h1><svg class="flake-icon" aria-hidden="true"><use href="#flake"/></svg>HOME TEMPERATURE MONITOR</h1>
+    <div class="subtitle">Pico 2 W · ThingSpeak public cloud data · V12</div>
   </div>
 
   <div class="header-right">
@@ -480,6 +698,7 @@ body.logged-in #loginScreen { display: none; }
     </div>
     <button id="refreshButton" onclick="loadData()">Refresh now</button>
     <button id="autoButton" onclick="toggleAuto()">Auto ON</button>
+    <button id="snowButton" onclick="toggleSnow()">❄ Snow ON</button>
     <button id="logoutButton" onclick="logout()">Logout</button>
   </div>
 </header>
@@ -635,12 +854,6 @@ body.logged-in #loginScreen { display: none; }
   </div>
 
   <div class="card">
-    <div class="card-label">LAST CLOUD UPDATE</div>
-    <div class="system-value" id="lastUpload">--</div>
-    <div class="card-bottom">Latest entry received by ThingSpeak</div>
-  </div>
-
-  <div class="card">
     <div class="card-label">PICO UPTIME</div>
     <div class="system-value neutral" id="picoUptime">Waiting for firmware data</div>
     <div class="card-bottom">Time since Pico last restarted</div>
@@ -655,7 +868,7 @@ body.logged-in #loginScreen { display: none; }
   <div class="card">
     <div class="card-label">LAST RESTART REASON</div>
     <div class="system-value neutral" id="restartReason">Waiting for firmware data</div>
-    <div class="card-bottom">Reported by the Pico at boot (field 7)</div>
+    <div class="card-bottom">Normal power-up or watchdog reset</div>
   </div>
 
   <div class="card">
@@ -666,11 +879,13 @@ body.logged-in #loginScreen { display: none; }
 </div>
 
 <div class="footer">
-  HOME TEMPERATURE MONITOR · V11 · Data provided by ThingSpeak
+  HOME TEMPERATURE MONITOR · V12 · Data provided by ThingSpeak
   <div id="lastRefresh" style="margin-top:6px">Not yet refreshed</div>
 </div>
 
 </div>
+
+<div class="drift" aria-hidden="true"></div>
 
 <script>
 /* -------------------------------------------------------
@@ -893,7 +1108,6 @@ function updateDashboard() {
   const timestamp = formatDate(latestFeed.created_at);
 
   document.getElementById("lastReading").textContent = timestamp;
-  document.getElementById("lastUpload").textContent = timestamp;
 
   /* ThingSpeak field 4: Pico uptime in seconds */
   const uptime = formatUptime(latestFeed.field4);
@@ -1588,21 +1802,110 @@ function logout() {
   dashboardStarted = false;
 }
 
-document.getElementById("loginForm").addEventListener("submit", event => {
-  event.preventDefault();
-  const username = document.getElementById("loginUser").value;
-  const password = document.getElementById("loginPassword").value;
+</script>
 
-  if (username === "Admin" && password === "Admin") {
-    document.getElementById("loginMessage").textContent = "";
-    document.body.classList.add("logged-in");
-    startDashboard();
-  } else {
-    document.getElementById("loginMessage").textContent =
-      "Incorrect username or password.";
+<script>
+/* -------------------------------------------------------
+   WINTER: FALLING SNOW (toggle button in the header)
+------------------------------------------------------- */
+(function () {
+  const canvas = document.getElementById("snow");
+  const ctx = canvas.getContext("2d");
+  const button = document.getElementById("snowButton");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stored = localStorage.getItem("htm_snow");
+
+  let enabled = stored ? stored === "on" : !reduceMotion;
+  let flakes = [];
+  let width = 0, height = 0;
+  let running = false;
+  let raf = 0;
+
+  function makeFlake(anywhere) {
+    const r = 0.8 + Math.random() * 2.4;
+    return {
+      x: Math.random() * width,
+      y: anywhere ? Math.random() * height : -10,
+      r,
+      speed: 0.25 + r * 0.28 + Math.random() * 0.3,
+      sway: 8 + Math.random() * 22,
+      phase: Math.random() * Math.PI * 2,
+      alpha: 0.35 + Math.random() * 0.5
+    };
   }
-});
 
+  function resize() {
+    const ratio = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    const count = Math.min(120, Math.max(30, Math.round(width * height / 16000)));
+    flakes = Array.from({ length: count }, () => makeFlake(true));
+  }
+
+  function frame(time) {
+    if (!running) return;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#eaf6ff";
+
+    for (const f of flakes) {
+      f.y += f.speed;
+      if (f.y > height + 10) Object.assign(f, makeFlake(false));
+
+      ctx.globalAlpha = f.alpha;
+      ctx.beginPath();
+      ctx.arc(f.x + Math.sin(time / 1800 + f.phase) * f.sway, f.y, f.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    canvas.style.display = "block";
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+    ctx.clearRect(0, 0, width, height);
+    canvas.style.display = "none";
+  }
+
+  function updateButton() {
+    button.textContent = enabled ? "❄ Snow ON" : "❄ Snow OFF";
+  }
+
+  window.toggleSnow = function () {
+    enabled = !enabled;
+    localStorage.setItem("htm_snow", enabled ? "on" : "off");
+    updateButton();
+    if (enabled) start(); else stop();
+  };
+
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { running = false; cancelAnimationFrame(raf); }
+    else if (enabled) start();
+  });
+
+  resize();
+  updateButton();
+  if (enabled) start(); else canvas.style.display = "none";
+})();
 </script>
 </body>
 </html>
